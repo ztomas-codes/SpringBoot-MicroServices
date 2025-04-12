@@ -1,5 +1,9 @@
 # MicroService Architektura ve Spring Bootu
 
+#### Diagram
+![Diagram](https://raw.githubusercontent.com/ztomas-codes/SpringBoot-MicroServices/refs/heads/main/diagram.svg)
+
+
 Projekt, na kterém jsem se učil mikro servisní architekturu a zkoušel více psát škálovatelný software a pár dalších Patternů a vychytávek
 - K8S (Kubernetees)
 - Docker
