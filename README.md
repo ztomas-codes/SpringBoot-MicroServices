@@ -28,7 +28,7 @@ Projekt, na kterém jsem se učil mikro servisní architekturu a zkoušel více 
      │   └── EmployeeService.java
 ```
 
-###Co jsem se naučil:
+### Co jsem se naučil:
 - CQRS
 - Event Sorcing
 - Kafka
