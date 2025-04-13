@@ -45,7 +45,8 @@ Funguje to tak, že je oddělený styl jakým se data zapisují a jakým se data
 
 ### Co jsem se naučil
 - CQRS
-### Zápis
+  - Command Query Separation ( Rozdělení na zápis a čtení - optimalizace)
+#### Zápis dat
 Zapisují se události (eventy), přes tzv. Producer:
 ```java
 public class CreditAccountEventProducer {
@@ -169,12 +170,12 @@ Zde můžete vidět že odchytává eventy a zakládá potom ReadModely na čten
 A zápis je řešený takto, protože pro zápis je mnohem rychlejší přidávat, než dělat update nebo delete, jelikož by musel locknout řádek přepsat atd..
 
 - Event Sorcing
- - Eventy / události jsou zdrojem dat
+  - Eventy / události jsou zdrojem dat
 - Kafka 
- - Používám jako queue na eventy z event sourcingu, které potom poslouchám a když přijde na řadu tak ho odbavím tím, že ho zacachuji do ReadModelu credit_account tabulky
+  - Používám jako queue na eventy z event sourcingu, které potom poslouchám a když přijde na řadu tak ho odbavím tím, že ho zacachuji do ReadModelu credit_account tabulky
 - LoadBalancer ( **Round Robin**)
 - Queues ( Dead Queues)
- - Když nějaký event z nějakého důvodu selže, tak ho přidám do Dead Que pro další zpracování
+  - Když nějaký event z nějakého důvodu selže, tak ho přidám do Dead Que pro další zpracování
 
 
 ## Employee Service - Normalní CRUD
