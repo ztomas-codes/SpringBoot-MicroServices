@@ -1,8 +1,3 @@
-- CQRS
-- Event Sorcing
-- Kafka
-- LoadBalancer ( **Round Robin**)
-- Queues ( Dead Queues)
 
 
 # MicroService Architektura ve Spring Bootu
@@ -21,6 +16,35 @@ Projekt, na kterém jsem se učil mikro servisní architekturu a zkoušel více 
 Jelikož dělám aplikaci, kterou chci hodně škálovat, tak v něčem jako je Credit Systém nesmí chybět CQRS.
 Funguje to tak, že je oddělený styl jakým se data zapisují a jakým se data čtou. Protože klasický CRUD není uplně optimální na zápis
 
+```txt
+├── Configs
+│   └── KafkaProducerConfig.java
+├── Controllers
+│   └── CreditAccountController.java
+├── CreditServiceApplication.java
+├── Entities
+│   ├── Events
+│   │   ├── AccountCreationEvent.java
+│   │   ├── CreditAdditionEvent.java
+│   │   ├── CreditEvent.java
+│   │   └── CreditRemovalEvent.java
+│   ├── EventStore.java
+│   ├── EventTypes.java
+│   └── ReadModels
+│       └── CreditAccount.java
+├── Models
+├── Repositories
+│   ├── CreditAccountRepository.java
+│   └── EventStoreRepository.java
+├── Services
+│   ├── CreditAccountEventConsumer.java
+│   ├── CreditAccountEventProducer.java
+│   └── CreditAccountService.java
+└── Utils
+```
+
+### Co jsem se naučil
+- CQRS
 ### Zápis
 Zapisují se události (eventy), přes tzv. Producer:
 ```java
@@ -144,26 +168,34 @@ public class CreditAccountEventConsumer {
 Zde můžete vidět že odchytává eventy a zakládá potom ReadModely na čtení v tabulce credit_account (Nachovaný aktualní kreditový stav = Rychlé čtení).
 A zápis je řešený takto, protože pro zápis je mnohem rychlejší přidávat, než dělat update nebo delete, jelikož by musel locknout řádek přepsat atd..
 
+- Event Sorcing
+ - Eventy / události jsou zdrojem dat
+- Kafka 
+ - Používám jako queue na eventy z event sourcingu, které potom poslouchám a když přijde na řadu tak ho odbavím tím, že ho zacachuji do ReadModelu credit_account tabulky
+- LoadBalancer ( **Round Robin**)
+- Queues ( Dead Queues)
+ - Když nějaký event z nějakého důvodu selže, tak ho přidám do Dead Que pro další zpracování
+
+
 ## Employee Service - Normalní CRUD
 
 ```txt
-└── employee_service
-     ├── Configs
-     │   └── ModelMapperConfig.java
-     ├── Controllers
-     │   ├── EmployeeController.java
-     │   └── EmployeeRestControllerAdvice.java
-     ├── EmployeeServiceApplication.java
-     ├── Entities
-     │   ├── Employee.java
-     │   └── Gender.java
-     ├── Models
-     │   ├── EmployeeCreateRequest.java
-     │   └── EmployeeResponse.java
-     ├── Repositories
-     │   └── EmployeeRepository.java
-     ├── Services
-     │   └── EmployeeService.java
+├── Configs
+│   └── ModelMapperConfig.java
+├── Controllers
+│   ├── EmployeeController.java
+│   └── EmployeeRestControllerAdvice.java
+├── EmployeeServiceApplication.java
+├── Entities
+│   ├── Employee.java
+│   └── Gender.java
+├── Models
+│   ├── EmployeeCreateRequest.java
+│   └── EmployeeResponse.java
+├── Repositories
+│   └── EmployeeRepository.java
+├── Services
+│   └── EmployeeService.java
 ```
 
 ### Co jsem se naučil:
