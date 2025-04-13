@@ -137,7 +137,9 @@ public class CreditAccountEventConsumer {
         acc.setBalance(acc.getBalance() - e.getAmount());
         creditAccountRepository.save(acc); 
     }
-}```
+}
+
+```
 
 Zde můžete vidět že odchytává eventy a zakládá potom ReadModely na čtení v tabulce credit_account (Nachovaný aktualní kreditový stav = Rychlé čtení).
 A zápis je řešený takto, protože pro zápis je mnohem rychlejší přidávat, než dělat update nebo delete, jelikož by musel locknout řádek přepsat atd..
