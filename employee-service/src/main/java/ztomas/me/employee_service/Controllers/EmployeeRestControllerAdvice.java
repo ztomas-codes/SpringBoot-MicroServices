@@ -17,17 +17,9 @@ public class EmployeeRestControllerAdvice {
     {
         Map<String, Object> map = new HashMap<>();
         map.put("success", false);
-        map.put("message", e.getMessage());
-        return map;
-    }
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, Object> handleException(RuntimeException e)
-    {
-        Map<String, Object> map = new HashMap<>();
-        map.put("success", false);
-        map.put("message", e.getMessage());
+        if (e.getMessage().contains("request body is missing"))
+            map.put("message", "You need to add body to this request");
+        else map.put("message", e.getMessage());
         return map;
     }
 

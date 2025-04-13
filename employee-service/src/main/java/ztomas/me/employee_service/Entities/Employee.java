@@ -1,6 +1,8 @@
 package ztomas.me.employee_service.Entities;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,6 +10,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PastOrPresent;
@@ -28,6 +33,9 @@ public class Employee {
     private Integer id;
 
     @NotEmpty
+    private String cuRefNo;
+
+    @NotEmpty
     private String firstName;
 
     @NotEmpty
@@ -41,5 +49,22 @@ public class Employee {
 
     @PastOrPresent(message = "hire date cannot be not set")
     private LocalDate hireDate;
+
+    @NotEmpty
+    private String password;
+
+    @NotEmpty
+    @Email
+    private String email;
+
+    @OneToMany(mappedBy = "employee")
+    private List<SessionToken> sessionTokens;
+
+    @PrePersist
+    public void generateCuRefNo() {
+        if (this.cuRefNo == null || this.cuRefNo.isEmpty()) {
+            this.cuRefNo = UUID.randomUUID().toString(); 
+        }
+    }
 
 }

@@ -18,9 +18,6 @@ import ztomas.me.employee_service.Entities.Gender;
 public class EmployeeResponse {
 
     @NotEmpty
-    private Integer id;
-
-    @NotEmpty
     private String firstName;
 
     @NotEmpty
@@ -35,4 +32,7 @@ public class EmployeeResponse {
 
     @PastOrPresent(message = "hire date needs to past")
     private LocalDate hireDate;
+
+    @NotEmpty
+    private String cuRefNo;
 }
