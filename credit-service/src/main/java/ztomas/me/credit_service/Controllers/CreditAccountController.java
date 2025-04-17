@@ -1,47 +1,63 @@
 package ztomas.me.credit_service.Controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import ztomas.me.credit_service.Entities.ReadModels.CreditAccount;
+import ztomas.me.credit_service.Models.CreditAccountManipulationCreditsRequest;
+import ztomas.me.credit_service.Models.CreditBankCreationRequest;
+import ztomas.me.credit_service.Models.SuccessResponse;
 import ztomas.me.credit_service.Services.CreditAccountService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/credit")
 @AllArgsConstructor
 public class CreditAccountController {
 
     private final CreditAccountService creditAccountService;
 
-    @GetMapping("/employee/{employeeId}")
+    @GetMapping("/{employeeId}")
     public CreditAccount getAccountByEmployeeId(@PathVariable Integer employeeId)
     {
         return creditAccountService.getAccount(employeeId);
     }
 
-    @GetMapping("/employee/create/{employeeId}")
-    public String createAccountByEmployeeId(@PathVariable Integer employeeId)
+    @PostMapping("/create")
+    public SuccessResponse createAccountByEmployeeId(@RequestBody @Valid CreditBankCreationRequest req)
     {
-        creditAccountService.createAccount(employeeId);
-        return "success";
+        creditAccountService.createAccount(req.getEmployeeId());
+        return SuccessResponse
+            .builder()
+            .message("successfully created")
+            .success(true)
+            .build();
     }
 
-    @GetMapping("/employee/add/{employeeId}")
-    public String testAdd(@PathVariable Integer employeeId)
+    @PostMapping("/add")
+    public SuccessResponse addCredits(@RequestBody @Valid CreditAccountManipulationCreditsRequest req)
     {
-        creditAccountService.addCreditsToAccount(employeeId, 500);
-        return "success";
+        creditAccountService.addCreditsToAccount(req.getEmployeeId(), req.getAmount());
+        return SuccessResponse
+            .builder()
+            .message("successfully added credits")
+            .success(true)
+            .build();
     }
 
-    @GetMapping("/employee/remove/{employeeId}")
-    public String testRemove(@PathVariable Integer employeeId)
+    @PostMapping("/remove")
+    public SuccessResponse removeCredits(@RequestBody @Valid CreditAccountManipulationCreditsRequest req)
     {
-        creditAccountService.removeCreditsFromAccount(employeeId, 500);
-        return "success";
+        creditAccountService.removeCreditsFromAccount(req.getEmployeeId(), req.getAmount());
+        return SuccessResponse
+            .builder()
+            .message("successfully removed credits")
+            .success(true)
+            .build();
     }
 }

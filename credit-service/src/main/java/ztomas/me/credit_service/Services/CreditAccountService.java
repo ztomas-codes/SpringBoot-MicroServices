@@ -3,7 +3,6 @@ package ztomas.me.credit_service.Services;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import ztomas.me.credit_service.Entities.Events.AccountCreationEvent;
 import ztomas.me.credit_service.Entities.Events.CreditAdditionEvent;
 import ztomas.me.credit_service.Entities.Events.CreditRemovalEvent;
@@ -26,7 +25,8 @@ public class CreditAccountService{
     public void createAccount(Integer employeeId)
     {
         boolean exists = creditAccountRepository.findByEmployeeId(employeeId).isPresent();
-        if (!exists) creditAccountEventProducer.createAndPushCreditEvent(
+        if (exists) throw new RuntimeException("Account already exists");
+        creditAccountEventProducer.createAndPushCreditEvent(
                 AccountCreationEvent
                     .builder()
                     .build()
